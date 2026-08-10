@@ -1,0 +1,16 @@
+import java.util.Arrays;
+
+public class KthSmallest {
+    public static int kthSmallest(int[] arr, int k) {
+        // Sort the array
+        Arrays.sort(arr);
+        // Return the k-th smallest element (index k-1)
+        return arr[k - 1];
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {7, 10, 4, 3, 20, 15};
+        int k = 3;
+        System.out.println("K-th smallest element is: " + kthSmallest(arr, k));
+    }
+}
