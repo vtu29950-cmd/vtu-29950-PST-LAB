@@ -1,0 +1,26 @@
+public class MaxElementInArray {
+    public static void main(String[] args) {
+        // Example array
+        int[] arr = {12, 45, 7, 89, 23, 56};
+
+        // Call the method to find maximum
+        int max = findMax(arr);
+
+        // Print the result
+        System.out.println("The maximum element in the array is: " + max);
+    }
+
+    // Method to find maximum element
+    public static int findMax(int[] array) {
+        // Assume first element is max
+        int max = array[0];
+
+        // Traverse the array
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] > max) {
+                max = array[i]; // Update max if current element is greater
+            }
+        }
+        return max;
+    }
+}
