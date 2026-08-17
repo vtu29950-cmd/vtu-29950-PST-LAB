@@ -1,0 +1,46 @@
+import java.util.List;
+
+class Result {
+
+    /*
+     * Complete the 'birthday' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts following parameters:
+     *  1. INTEGER_LIST s
+     *  2. INTEGER d
+     *  3. INTEGER m
+     */
+
+    public static int birthday(List<Integer> s, int d, int m) {
+        int count = 0;
+        int n = s.size();
+        
+        // If the chocolate squares are fewer than the birth month length, it's impossible
+        if (n < m) {
+            return 0;
+        }
+        
+        // Calculate the sum of the first window of size 'm'
+        int currentSum = 0;
+        for (int i = 0; i < m; i++) {
+            currentSum += s.get(i);
+        }
+        
+        // Check the first window
+        if (currentSum == d) {
+            count++;
+        }
+        
+        // Slide the window across the rest of the list
+        for (int i = m; i < n; i++) {
+            currentSum = currentSum - s.get(i - m) + s.get(i);
+            if (currentSum == d) {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+
+}
