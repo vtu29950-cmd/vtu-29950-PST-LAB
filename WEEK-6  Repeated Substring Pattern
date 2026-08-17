@@ -1,0 +1,9 @@
+class Solution {
+    public boolean repeatedSubstringPattern(String s) {
+        String doubled = s + s;
+        // Remove the first and last character of the doubled string
+        String sub = doubled.substring(1, doubled.length() - 1);
+        // Check if the original string 's' is still a substring
+        return sub.contains(s);
+    }
+}
