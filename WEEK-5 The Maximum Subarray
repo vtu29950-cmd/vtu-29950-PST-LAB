@@ -1,0 +1,55 @@
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+
+class Result {
+
+    /*
+     * Complete the 'maxSubarray' function below.
+     *
+     * The function is expected to return an INTEGER_ARRAY.
+     * The function accepts INTEGER_ARRAY arr as parameter.
+     */
+
+    public static List<Integer> maxSubarray(List<Integer> arr) {
+        int maxSubarraySum = arr.get(0);
+        int currentSubarraySum = arr.get(0);
+        
+        int maxSubsequenceSum = 0;
+        int maxElement = arr.get(0);
+        boolean hasPositive = false;
+        
+        for (int i = 0; i < arr.size(); i++) {
+            int val = arr.get(i);
+            
+            // Track maximum single element (useful if all numbers are negative)
+            if (val > maxElement) {
+                maxElement = val;
+            }
+            
+            // Subsequence logic: sum all positive numbers
+            if (val > 0) {
+                maxSubsequenceSum += val;
+                hasPositive = true;
+            }
+            
+            // Subarray logic (Kadane's algorithm), starting from index 1 for current sum
+            if (i > 0) {
+                currentSubarraySum = Math.max(val, currentSubarraySum + val);
+                maxSubarraySum = Math.max(maxSubarraySum, currentSubarraySum);
+            }
+        }
+        
+        // Edge case: if there are no positive numbers, the max subsequence is the maximum single element (closest to 0)
+        if (!hasPositive) {
+            maxSubsequenceSum = maxElement;
+        }
+        
+        List<Integer> result = new ArrayList<>();
+        result.add(maxSubarraySum);
+        result.add(maxSubsequenceSum);
+        
+        return result;
+    }
+
+}
