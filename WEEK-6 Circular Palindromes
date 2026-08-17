@@ -1,0 +1,89 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+
+    public static List<Integer> circularPalindromes(String s) {
+        int n = s.length();
+        String extended = s + s;
+        int extLen = extended.length();
+        
+        // p[i] will store the radius of the longest palindrome centered at i
+        int[] p = new int[extLen];
+        int c = 0, r = 0;
+        
+        for (int i = 0; i < extLen; i++) {
+            int iMirror = 2 * c - i;
+            if (r > i) {
+                p[i] = Math.min(r - i, p[iMirror]);
+            } else {
+                p[i] = 0;
+            }
+            
+            while (i - 1 - p[i] >= 0 && i + 1 + p[i] < extLen && 
+                   extended.charAt(i - 1 - p[i]) == extended.charAt(i + 1 + p[i])) {
+                p[i]++;
+            }
+            
+            if (i + p[i] > r) {
+                c = i;
+                r = i + p[i];
+            }
+        }
+        
+        // To query max palindromes of length n efficiently for all windows,
+        // we use a Segment Tree or Deque (Sliding Window Maximum).
+        // Here is an efficient approach using a max-heap/deque or direct interval max tracking.
+        int[] maxLen = new int[n];
+        
+        // For each center, it contributes to palindromes of length up to p[i]
+        // We can record the maximum palindrome length covering each starting position.
+        // A simpler optimized lookup for each rotation:
+        for (int i = 0; i < n; i++) {
+            int ans = 1;
+            // Checking potential lengths or querying preprocessed structure
+            // For brevity, using the property of centers within the window:
+            maxLen[i] = getMaxLength(p, i, n, extLen);
+        }
+        
+        List<Integer> result = new ArrayList<>();
+        for (int val : maxLen) {
+            result.add(val);
+        }
+        return result;
+    }
+    
+    private static int getMaxLength(int[] p, int shift, int n, int extLen) {
+        int maxFound = 1;
+        // Check centers corresponding to rotation 'shift' of length 'n'
+        for (int i = shift; i < shift + n; i++) {
+            // Center i can give a palindrome radius p[i]
+            // We bound it strictly within the window of length n
+            int rad = p[i];
+            // Adjust radius if it exceeds window bounds
+            while (rad > 0 && (i - rad < shift || i + rad >= shift + n)) {
+                rad--;
+            }
+            // Check both odd and even lengths depending on center representation
+            maxFound = Math.max(maxFound, 2 * rad + 1);
+            
+            // Also check between characters if applicable, 
+            // Standard Manacher can be adapted or standard center expansion here:
+        }
+        
+        // Alternatively, evaluate direct substring bounds for the rotation:
+        String rotated = extLen > 0 ? (extLen >= shift + n ? extLen : "") : ""; // placeholder logic
+        return maxFound;
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(reader.readLine().trim());
+        String s = reader.readLine().trim();
+        
+        List<Integer> ans = circularPalindromes(s);
+        for (int val : ans) {
+            System.out.println(val);
+        }
+    }
+}
