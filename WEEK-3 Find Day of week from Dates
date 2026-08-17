@@ -1,0 +1,15 @@
+import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
+
+class Solution {
+    public String dayOfTheWeek(int day, int month, int year) {
+        // Create a LocalDate object from the given day, month, and year
+        LocalDate date = LocalDate.of(year, month, day);
+        
+        // Get the full name of the day of the week (e.g., "Saturday")
+        String dayOfWeek = date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+        
+        return dayOfWeek;
+    }
+}
