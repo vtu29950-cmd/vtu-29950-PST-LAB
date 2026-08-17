@@ -1,0 +1,27 @@
+class Solution {
+    public int maxSubarraySumCircular(int[] nums) {
+        int totalSum = 0;
+        int currentMax = 0, maxSum = nums[0];
+        int currentMin = 0, minSum = nums[0];
+        
+        for (int num : nums) {
+            totalSum += num;
+            
+            // Kadane's for Maximum Subarray Sum
+            currentMax = Math.max(num, currentMax + num);
+            maxSum = Math.max(maxSum, currentMax);
+            
+            // Kadane's for Minimum Subarray Sum
+            currentMin = Math.min(num, currentMin + num);
+            minSum = Math.min(minSum, currentMin);
+        }
+        
+        // If all numbers are negative, maxSum will be the maximum element,
+        // and totalSum - minSum will be 0. We should return maxSum in this case.
+        if (maxSum < 0) {
+            return maxSum;
+        }
+        
+        return Math.max(maxSum, totalSum - minSum);
+    }
+}
