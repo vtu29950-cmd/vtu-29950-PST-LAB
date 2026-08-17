@@ -1,0 +1,77 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public static void matrixRotation(List<List<Integer>> matrix, int r) {
+        int m = matrix.size();
+        int n = matrix.get(0).size();
+        
+        int[][] res = new int[m][n];
+        
+        // Total number of layers is min(m, n) / 2
+        int layers = Math.min(m, n) / 2;
+        
+        for (int layer = 0; layer < layers; layer++) {
+            List<Integer> currentLayer = new ArrayList<>();
+            
+            int r1 = layer, c1 = layer;
+            int r2 = m - 1 - layer, c2 = n - 1 - layer;
+            
+            // 1. Traverse top edge (left to right)
+            for (int j = c1; j <= c2; j++) {
+                currentLayer.add(matrix.get(r1).get(j));
+            }
+            // 2. Traverse right edge (top to bottom, skipping the top-right corner)
+            for (int i = r1 + 1; i <= r2; i++) {
+                currentLayer.add(matrix.get(i).get(c2));
+            }
+            // 3. Traverse bottom edge (right to left, skipping the bottom-right corner)
+            for (int j = c2 - 1; j >= c1; j--) {
+                currentLayer.add(matrix.get(r2).get(j));
+            }
+            // 4. Traverse left edge (bottom to top, skipping bottom-left and top-left corners)
+            for (int i = r2 - 1; i > r1; i--) {
+                currentLayer.add(matrix.get(i).get(c1));
+            }
+            
+            // Effective rotations for the current layer
+            int len = currentLayer.size();
+            int shift = r % len;
+            
+            // Put elements back into the result matrix in anti-clockwise rotated order
+            List<Integer> rotatedLayer = new ArrayList<>();
+            for (int i = 0; i < len; i++) {
+                rotatedLayer.add(currentLayer.get((i + shift) % len));
+            }
+            
+            // Map rotated layer back to the 2D matrix
+            int idx = 0;
+            // Top edge
+            for (int j = c1; j <= c2; j++) {
+                res[r1][j] = rotatedLayer.get(idx++);
+            }
+            // Right edge
+            for (int i = r1 + 1; i <= r2; i++) {
+                res[i][c2] = rotatedLayer.get(idx++);
+            }
+            // Bottom edge
+            for (int j = c2 - 1; j >= c1; j--) {
+                res[r2][j] = rotatedLayer.get(idx++);
+            }
+            // Left edge
+            for (int i = r2 - 1; i > r1; i--) {
+                res[i][c1] = rotatedLayer.get(idx++);
+            }
+        }
+        
+        // Print the resultant matrix row by row
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                sb.append(res[i][j]).append(j == n - 1 ? "" : " ");
+            }
+            sb.append("\n");
+        }
+        System.out.print(sb.toString());
+    }
+}
